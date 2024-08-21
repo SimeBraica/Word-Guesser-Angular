@@ -1,22 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WordContainerComponent } from './components/word-container/word-container.component';
 import { WordGuesserComponent } from './components/word-guesser/word-guesser.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    WordContainerComponent,
-    WordGuesserComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  declarations: [AppComponent, WordContainerComponent, WordGuesserComponent],
+  imports: [BrowserModule, AppRoutingModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
