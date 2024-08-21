@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { WordContainerComponent } from './components/word-container/word-container.component';
+import { WordGuesserComponent } from './components/word-guesser/word-guesser.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    WordContainerComponent
+    WordContainerComponent,
+    WordGuesserComponent
   ],
   imports: [
     BrowserModule,
