@@ -1,0 +1,17 @@
+<div *ngFor="let word of allWordsQueue">
+  <app-word-container
+    [wordToGuess]="word"
+    [inputWord]="sendInputWord"
+  ></app-word-container>
+</div>
+<div>
+  <input
+    type="text"
+    id="inputWord"
+    [(ngModel)]="inputWord"
+    name="inputWord"
+    (keyup.enter)="consoleLogInputWord()"
+  />
+</div>
+
+<!-- -->
