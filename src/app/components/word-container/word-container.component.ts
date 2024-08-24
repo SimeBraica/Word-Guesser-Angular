@@ -21,18 +21,28 @@ export class WordContainerComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   ngOnChanges() {
-    console.log("ja san prije nego sto udem");
     this.checkWordInAllWords(this.inputWord);
-    console.log("ovo je nakon sta izaden");
     console.log(
       'Ja sam u djecijoj komponenti ' + this.inputWord + ' ric je uredu'
     );
   }
 
-  checkWordInAllWords(word: string){
-    if(this.wordToGuess.title == word){
-      this.wordToGuess.isCorrect = true;
-      console.log(this.wordToGuess);
+  checkWordInAllWords(word: string) {
+    if (this.formatWord(this.wordToGuess.title) != this.formatWord(word)) {
+      return;
     }
+    this.wordToGuess.isCorrect = true;
+    console.log(this.wordToGuess);
+  }
+
+  formatWord(word: string): string{
+    return word.split(" ").join("").toLocaleLowerCase();
+  }
+
+  changeBackgroundOfWord(){
+    if(this.wordToGuess.isCorrect){
+      return 'background: #DC143C'
+    }
+    return 'background: #000000'
   }
 }

@@ -8,19 +8,22 @@ import { WordToGuess } from '../../models/word-to-guess';
 })
 export class WordGuesserComponent {
   allWordsQueue: WordToGuess[] = [
-    { title: 'ad', timeOnScreen: 12, isCorrect: false },
-    { title: 'fwefwe', timeOnScreen: 12, isCorrect: false },
-    { title: 'dsagerje', timeOnScreen: 12, isCorrect: false },
-    { title: 'jztjdfgjf', timeOnScreen: 12, isCorrect: false },
-    { title: 'ewtzwruzsfh', timeOnScreen: 12, isCorrect: false },
-    { title: 'htehrsdgh', timeOnScreen: 12, isCorrect: false },
+    { title: 'dog', timeOnScreen: 12, isCorrect: false },
+    { title: 'cat', timeOnScreen: 12, isCorrect: false },
+    { title: 'mouse', timeOnScreen: 12, isCorrect: false },
+    { title: 'street', timeOnScreen: 12, isCorrect: false },
+    { title: 'house', timeOnScreen: 12, isCorrect: false },
+    { title: 'hamburger', timeOnScreen: 12, isCorrect: false },
+    { title: 'PC', timeOnScreen: 12, isCorrect: false },
+    { title: 'New York', timeOnScreen: 12, isCorrect: false },
   ];
+  
   allInputWords: string[] = [];
-  sendInputWord: string = "";
-  inputWord: string = "";
+  sendInputWord: string = '';
+  inputWord: string = '';
 
   consoleLogInputWord() {
-    if(this.inputWord == ""){
+    if (this.inputWord == '') {
       return;
     }
     this.allInputWords.push(this.inputWord);
