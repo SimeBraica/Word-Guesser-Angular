@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
@@ -17,32 +19,37 @@ export class WordContainerComponent implements OnInit, OnChanges {
   wordToGuess!: WordToGuess;
   @Input()
   inputWord!: string;
-
+  @Output()
+  guessedWordEmmiter = new EventEmitter<string>();
+  @Output()
+  wrongWordEmmiter = new EventEmitter<string>();
   ngOnInit() {}
 
   ngOnChanges() {
-    this.checkWordInAllWords(this.inputWord);
-    console.log(
-      'Ja sam u djecijoj komponenti ' + this.inputWord + ' ric je uredu'
-    );
+    if (this.inputWord != '') {
+      this.checkWordInAllWords(this.inputWord);
+    }
   }
 
   checkWordInAllWords(word: string) {
     if (this.formatWord(this.wordToGuess.title) != this.formatWord(word)) {
+      //console.log("u djecijoj komponenti sam wrong word " + word );
+      this.wrongWordEmmiter.emit(word);
       return;
     }
     this.wordToGuess.isCorrect = true;
-    console.log(this.wordToGuess);
+    //console.log(this.wordToGuess);
+    this.guessedWordEmmiter.emit(this.wordToGuess.title); 
+    return;
+  }
+  formatWord(word: string): string {
+    return word.split(' ').join('').toLowerCase();
   }
 
-  formatWord(word: string): string{
-    return word.split(" ").join("").toLocaleLowerCase();
-  }
-
-  changeBackgroundOfWord(){
-    if(this.wordToGuess.isCorrect){
-      return 'background: #DC143C'
+  changeBackgroundOfWord() {
+    if (this.wordToGuess.isCorrect) {
+      return 'display: none';
     }
-    return 'background: #000000'
+    return 'background: #000000';
   }
 }

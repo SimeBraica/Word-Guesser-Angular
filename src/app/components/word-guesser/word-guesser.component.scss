@@ -1,0 +1,5 @@
+#grid-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr; /* Creates two columns */
+    grid-gap: 10px; /* Adds gap between grid items */
+  }

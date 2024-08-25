@@ -1,17 +1,28 @@
-<div *ngFor="let word of allWordsQueue">
-  <app-word-container
-    [wordToGuess]="word"
-    [inputWord]="sendInputWord"
-  ></app-word-container>
+<div id="grid-container">
+  <div *ngFor="let word of allWordsQueue">
+    <app-word-container
+      [wordToGuess]="word"
+      [inputWord]="sendInputWord"
+      (guessedWordEmmiter)="guessedWord($event)"
+      (wrongWordEmmiter)="wrongWord($event)"
+    ></app-word-container>
+  </div>
+  <div>
+    <app-guessed-words>
+  
+    </app-guessed-words>
+  </div>
 </div>
+
 <div>
   <input
     type="text"
     id="inputWord"
     [(ngModel)]="inputWord"
     name="inputWord"
-    (keyup.enter)="consoleLogInputWord()"
+    (keyup.enter)="setWord()"
   />
 </div>
+<div id="counter">{{ guessedWords }} / {{ allWords }}</div>
 
 <!-- -->
