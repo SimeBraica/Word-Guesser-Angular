@@ -1,7 +1,3 @@
-<div
-  id="word-container"
-  [style]="changeBackgroundOfWord()"
-  *ngFor="let word of wordsToGuess"
->
+<div id="word-container" *ngFor="let word of wordsToGuess">
   {{ word.title }}
 </div>

@@ -18,7 +18,7 @@ export class WordContainerComponent implements OnInit, OnChanges {
   @Input()
   wordsToGuess: WordToGuess[] = [];
   @Input()
-  inputWord!: string;
+  inputWord: string = '';
   @Output()
   guessedWordEmmiter = new EventEmitter<string>();
   @Output()
@@ -26,7 +26,6 @@ export class WordContainerComponent implements OnInit, OnChanges {
 
   titlesWordsToGuess: string[] = [];
   ngOnInit() {
-    console.log(this.wordsToGuess);
     this.wordsToGuess.forEach((word) => {
       this.titlesWordsToGuess.push(this.formatWord(word.title));
     });
@@ -35,33 +34,28 @@ export class WordContainerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    console.log("promjena");
-    if (this.inputWord != '') {
-      this.checkWordInAllWords(this.inputWord);
+    console.log(this.wordsToGuess);
+    if (this.inputWord == '') {
+      return;
     }
+    this.checkWordInAllWords(this.inputWord);
   }
 
   checkWordInAllWords(word: string) {
-    if (!this.titlesWordsToGuess.includes(this.formatWord(word))) {
+    word = this.formatWord(word);
+    if (!this.titlesWordsToGuess.includes(word)) {
       console.log('u djecijoj komponenti sam wrong word ' + word);
       this.wrongWordEmmiter.emit(word);
       return;
     }
-    console.log("dobar sam");
+    console.log('dobar sam');
     //this.wordsToGuess.at()
-  /*   this.wordsToGuesss.isCorrect = true;
-    console.log(this.wordToGuess);
-    this.guessedWordEmmiter.emit(this.wordsToGues.title); */
+    /* this.wordsToGuesss.isCorrect = true;
+    console.log(this.wordToGuess); */
+    this.guessedWordEmmiter.emit(word);
     return;
   }
   formatWord(word: string): string {
     return word.split(' ').join('').toLowerCase();
-  }
-
-  changeBackgroundOfWord() {
-    //if (/*this.wordToGuess.isCorrect*/ true) {
-    //  return 'display: none';
-    //}
-    return 'background: #000000';
   }
 }
