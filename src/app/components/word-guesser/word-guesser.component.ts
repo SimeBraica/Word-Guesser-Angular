@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-word-guesser',
@@ -7,12 +8,6 @@ import { WordToGuess } from '../../models/word-to-guess';
   styleUrl: './word-guesser.component.scss',
 })
 export class WordGuesserComponent implements OnInit {
-
-  constructor(/* private cdref: ChangeDetectorRef */) {}
-
-  ngOnInit() {
-    //this.cdref.detectChanges();
-  }
 
   allWordsQueue: WordToGuess[] = [
     { title: 'dog', timeOnScreen: 12, isCorrect: false },
@@ -24,6 +19,13 @@ export class WordGuesserComponent implements OnInit {
     { title: 'PC', timeOnScreen: 12, isCorrect: false },
     { title: 'New York', timeOnScreen: 12, isCorrect: false }
   ];
+  constructor(/* private cdref: ChangeDetectorRef */) {
+
+  }
+
+
+  ngOnInit() {
+  }
 
   allWords: number = this.allWordsQueue.length;
   guessedWords: number = 0;
@@ -37,16 +39,12 @@ export class WordGuesserComponent implements OnInit {
 
   setWord() {
     this.removeDuplicatesFromInputs();
-    console.log("sve rici u arr: " + this.allInputWords);
     if (this.inputWord == '') {
       return;
     }
-    console.log("ric na nultom mistu: " + this.allInputWords[0]);
     this.sendInputWord = this.allInputWords[0];
     //this.allInputWords.shift();
     this.inputWord = '';
-    console.log("sve pogodene rici " + this.allGuessedWords)
-    console.log("sve promasene  rici " + this.allWrongWords)
   }
 
   guessedWord(event: string) {
@@ -55,7 +53,7 @@ export class WordGuesserComponent implements OnInit {
     this.guessedWords++;
   }
 
-  wrongWord(event: string){
+  wrongWord(event: string) {
     this.allWrongWords.push(event);
     this.allInputWords.shift();
   }

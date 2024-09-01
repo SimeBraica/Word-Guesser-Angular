@@ -16,30 +16,42 @@ import { WordToGuess } from '../../models/word-to-guess';
 })
 export class WordContainerComponent implements OnInit, OnChanges {
   @Input()
-  wordToGuess!: WordToGuess;
+  wordsToGuess: WordToGuess[] = [];
   @Input()
   inputWord!: string;
   @Output()
   guessedWordEmmiter = new EventEmitter<string>();
   @Output()
   wrongWordEmmiter = new EventEmitter<string>();
-  ngOnInit() {}
+
+  titlesWordsToGuess: string[] = [];
+  ngOnInit() {
+    console.log(this.wordsToGuess);
+    this.wordsToGuess.forEach((word) => {
+      this.titlesWordsToGuess.push(this.formatWord(word.title));
+    });
+
+    console.log(this.titlesWordsToGuess);
+  }
 
   ngOnChanges() {
+    console.log("promjena");
     if (this.inputWord != '') {
       this.checkWordInAllWords(this.inputWord);
     }
   }
 
   checkWordInAllWords(word: string) {
-    if (this.formatWord(this.wordToGuess.title) != this.formatWord(word)) {
-      //console.log("u djecijoj komponenti sam wrong word " + word );
+    if (!this.titlesWordsToGuess.includes(this.formatWord(word))) {
+      console.log('u djecijoj komponenti sam wrong word ' + word);
       this.wrongWordEmmiter.emit(word);
       return;
     }
-    this.wordToGuess.isCorrect = true;
-    //console.log(this.wordToGuess);
-    this.guessedWordEmmiter.emit(this.wordToGuess.title); 
+    console.log("dobar sam");
+    //this.wordsToGuess.at()
+  /*   this.wordsToGuesss.isCorrect = true;
+    console.log(this.wordToGuess);
+    this.guessedWordEmmiter.emit(this.wordsToGues.title); */
     return;
   }
   formatWord(word: string): string {
@@ -47,9 +59,9 @@ export class WordContainerComponent implements OnInit, OnChanges {
   }
 
   changeBackgroundOfWord() {
-    if (this.wordToGuess.isCorrect) {
-      return 'display: none';
-    }
+    //if (/*this.wordToGuess.isCorrect*/ true) {
+    //  return 'display: none';
+    //}
     return 'background: #000000';
   }
 }
