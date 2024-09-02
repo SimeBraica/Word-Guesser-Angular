@@ -29,12 +29,9 @@ export class WordContainerComponent implements OnInit, OnChanges {
     this.wordsToGuess.forEach((word) => {
       this.titlesWordsToGuess.push(this.formatWord(word.title));
     });
-
-    console.log(this.titlesWordsToGuess);
   }
 
   ngOnChanges() {
-    console.log(this.wordsToGuess);
     if (this.inputWord == '') {
       return;
     }
@@ -49,9 +46,7 @@ export class WordContainerComponent implements OnInit, OnChanges {
       return;
     }
     console.log('dobar sam');
-    //this.wordsToGuess.at()
-    /* this.wordsToGuesss.isCorrect = true;
-    console.log(this.wordToGuess); */
+
     this.guessedWordEmmiter.emit(word);
     return;
   }

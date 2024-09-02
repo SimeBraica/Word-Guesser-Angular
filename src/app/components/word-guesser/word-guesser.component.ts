@@ -1,6 +1,7 @@
-import { ChangeDetectorRef, Component, input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
-import { Title } from '@angular/platform-browser';
+import { WordService } from '../../services/word-service/word.service';
+import { DictionaryService } from '../../services/dictionary-service/dictionary.service';
 
 @Component({
   selector: 'app-word-guesser',
@@ -8,24 +9,52 @@ import { Title } from '@angular/platform-browser';
   styleUrl: './word-guesser.component.scss',
 })
 export class WordGuesserComponent implements OnInit {
-  allWordsQueue: WordToGuess[] = [
-    { title: 'dog', timeOnScreen: 12, isCorrect: false },
-    { title: 'cat', timeOnScreen: 12, isCorrect: false },
-    { title: 'mouse', timeOnScreen: 12, isCorrect: false },
-    { title: 'street', timeOnScreen: 12, isCorrect: false },
-    { title: 'house', timeOnScreen: 12, isCorrect: false },
-    { title: 'hamburger', timeOnScreen: 12, isCorrect: false },
-    { title: 'PC', timeOnScreen: 12, isCorrect: false },
-    { title: 'New York', timeOnScreen: 12, isCorrect: false },
-  ];
-  constructor(/* private cdref: ChangeDetectorRef */) {}
+  titles: string[] = [];
 
-  ngOnInit() {}
+  allWordsQueue: WordToGuess[] = [];
+  constructor(
+    private wordService: WordService,
+    private dictionaryService: DictionaryService
+  ) {}
 
+  ngOnInit() {
+    this.loadRandomWords();
+  }
+  loadRandomWords() {
+    this.dictionaryService.getRandomWords().subscribe((data: string[]) => {
+      console.log('ja sam u funkciji loadRandomWords i ispod mene je data');
+      console.log(data);
+      this.titles = data;
+    });
+  }
+
+  isTitlesEmpty(): boolean {
+    console.log('u funkciji sam koja se zove isTitlesEmpty()');
+    console.log(this.titles);
+    if (this.titles.length == 10) {
+      this.createAndFillWordObject();
+      return true;
+    }
+    return false;
+  }
+
+  createAndFillWordObject() {
+    console.log("ispod mene je duzina title");
+    console.log(this.titles.length);
+    this.titles.forEach((title) => {
+      let newWordToGuess: WordToGuess = {
+        title: title,
+        timeOnScreen: 12,
+        isCorrect: false,
+      };
+      console.log("ispod mene je newWordToGuess objekt");
+      console.log(newWordToGuess);
+      this.allWordsQueue.push(newWordToGuess);
+    });
+  }
   allWords: number = this.allWordsQueue.length;
   guessedWords: number = 0;
 
-  allInputWords: string[] = [];
   sendInputWord: string = '';
   inputWord: string = '';
 
@@ -33,39 +62,29 @@ export class WordGuesserComponent implements OnInit {
   allGuessedWords: string[] = [];
 
   setWord() {
-    /*     this.removeDuplicatesFromInputs();
-     */ if (this.inputWord == '') {
+    if (this.inputWord == '') {
       return;
     }
     this.sendInputWord = this.inputWord;
     this.inputWord = '';
-    //this.inputWord = '';
-    /*     this.sendInputWord = this.allInputWords[0];
-     */ //this.allInputWords.shift();
-    /*     this.inputWord = '';
-     */
   }
 
-  guessedWord(correctWord: string) {
-    this.allGuessedWords.push(correctWord);
-    this.deleteWord(correctWord);
-    console.log('Ovo su pogodene rici');
-    console.log(this.allGuessedWords);
-    /* this.allInputWords.shift();
-    this.guessedWords++; */
+  guessedWord(event: string) {
+    this.allGuessedWords.push(event);
+    this.allGuessedWords = this.wordService.removeDuplicates(
+      this.allGuessedWords
+    );
+    this.deleteWord(event);
   }
 
-  wrongWord(missedWord: string) {
-    this.allWrongWords.push(missedWord);
-    console.log('Ovo su promasene rici');
-    console.log(this.allWrongWords);
+  wrongWord(event: string) {
+    this.allWrongWords.push(event);
   }
 
-
-  deleteWord(word: string){
-    for(let i = 0; i < this.allWordsQueue.length; i++){
-      if(word == this.formatWord(this.allWordsQueue[i].title)){
-       this.allWordsQueue.splice(i, 1);
+  deleteWord(word: string) {
+    for (let i = 0; i < this.allWordsQueue.length; i++) {
+      if (word == this.formatWord(this.allWordsQueue[i].title)) {
+        this.allWordsQueue.splice(i, 1);
       }
     }
   }
