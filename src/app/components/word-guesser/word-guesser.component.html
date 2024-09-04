@@ -1,28 +1,32 @@
 <div *ngIf="isTitlesEmpty()">
-  <app-word-container
-    [wordsToGuess]="allWordsQueue"
-    [inputWord]="sendInputWord"
-    (guessedWordEmmiter)="guessedWord($event)"
-    (wrongWordEmmiter)="wrongWord($event)"
-  ></app-word-container>
+  <div class="words-layout">
+    <app-word-container
+      [wordsToGuess]="allWordsQueue"
+      [inputWord]="sendInputWord"
+      (guessedWordEmmiter)="guessedWord($event)"
+      (wrongWordEmmiter)="wrongWord($event)"
+    ></app-word-container>
+
+    <div class="words-child-components">
+      <app-guessed-words [guessedWords]="allGuessedWords"> </app-guessed-words>
+      <app-wrong-words [wrongWords]="allWrongWords"> </app-wrong-words>
+    </div>
+  </div>
 
   <div>
-    <app-guessed-words [guessedWords]="allGuessedWords"> </app-guessed-words>
-  </div>
-  <div>
-    <app-wrong-words [wrongWords]="allWrongWords"> </app-wrong-words>
+    <div class="input-container">
+      <input
+        type="text"
+        id="inputWord"
+        [(ngModel)]="inputWord"
+        name="inputWord"
+        (keyup.enter)="setWord()"
+      />
+    </div>
   </div>
 
-  <div>
-    <input
-      type="text"
-      id="inputWord"
-      [(ngModel)]="inputWord"
-      name="inputWord"
-      (keyup.enter)="setWord()"
-    />
-  </div>
   <div id="counter">{{ guessedWords }} / {{ allWords }}</div>
+  <div>Accuracy: {{ accuracy }} %</div>
 </div>
 
 <!-- -->

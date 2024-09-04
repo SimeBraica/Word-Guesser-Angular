@@ -2,21 +2,20 @@ import { Component, numberAttribute, OnInit } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
 import { WordService } from '../../services/word-service/word.service';
 import { DictionaryService } from '../../services/dictionary-service/dictionary.service';
-import { count } from 'rxjs';
-
+import { Decimal } from 'decimal.js';
 @Component({
   selector: 'app-word-guesser',
   templateUrl: './word-guesser.component.html',
   styleUrl: './word-guesser.component.scss',
 })
 export class WordGuesserComponent implements OnInit {
-
   constructor(
     private wordService: WordService,
     private dictionaryService: DictionaryService
   ) {}
 
   ngOnInit() {
+    console.log('accuracy: ' + this.accuracy);
     this.loadRandomWords();
   }
 
@@ -26,6 +25,8 @@ export class WordGuesserComponent implements OnInit {
 
   allWords: number = 10;
   guessedWords: number = 0;
+  wrongWords: number = 0;
+  accuracy: Decimal.Value = 0;
 
   sendInputWord: string = '';
   inputWord: string = '';
@@ -40,6 +41,7 @@ export class WordGuesserComponent implements OnInit {
   }
 
   isTitlesEmpty(): boolean {
+    console.log("usa u funkciju isTitlesEmpty");
     if (this.titles.length == 10) {
       this.createAndFillWordObject();
       return true;
@@ -75,11 +77,20 @@ export class WordGuesserComponent implements OnInit {
     );
     this.counterForAllWords--;
     this.guessedWords++;
+    console.log("guessedWords: " + this.guessedWords)
+    console.log("wrongWords: " + this.wrongWords);
+    this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.deleteWord(event);
+    console.log("allWords nakon guessed");
+    console.log(this.allWordsQueue);
   }
 
   wrongWord(event: string) {
+    this.wrongWords++;
+    this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.allWrongWords.push(event);
+    console.log("allWords nakon wrong");
+    console.log(this.allWordsQueue);
   }
 
   deleteWord(word: string) {
@@ -88,6 +99,10 @@ export class WordGuesserComponent implements OnInit {
         this.allWordsQueue.splice(i, 1);
       }
     }
+  }
+
+  setAccuracy(allWords: number, guessedWords: number, wrongWords: number) {
+    return ((guessedWords / (allWords + wrongWords)) * 100).toFixed(3);
   }
 
   formatWord(word: string): string {
