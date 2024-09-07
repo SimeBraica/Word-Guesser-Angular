@@ -8,15 +8,12 @@
   width: 200px;
   top: 0;
   height: 100%;
+  overflow: auto;
+  scrollbar-width: thin; 
+  scrollbar-color: #f4b5b5 transparent; 
 }
 
-.input-container {
-    position: fixed;  /* Fix the container to the viewport */
-    bottom: 20px;     /* Position the container 20px from the bottom */
-    transform: translateX(-50%, -50%); /* Shift the container to truly center it */
-  }
-
-input {
-  width: 300px; /* Set a fixed width for the input */
-  padding: 10px; /* Optional: Add some padding for better appearance */
+.word-guesser-component{
+  height: 100%;
 }
+

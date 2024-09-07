@@ -1,4 +1,4 @@
-<div *ngIf="isTitlesEmpty()">
+<div *ngIf="isTitlesEmpty()" class="word-guesser-component">
   <div class="words-layout">
     <app-word-container
       [wordsToGuess]="allWordsQueue"
@@ -28,5 +28,3 @@
   <div id="counter">{{ guessedWords }} / {{ allWords }}</div>
   <div>Accuracy: {{ accuracy }} %</div>
 </div>
-
-<!-- -->

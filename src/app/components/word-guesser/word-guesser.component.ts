@@ -3,6 +3,7 @@ import { WordToGuess } from '../../models/word-to-guess';
 import { WordService } from '../../services/word-service/word.service';
 import { DictionaryService } from '../../services/dictionary-service/dictionary.service';
 import { Decimal } from 'decimal.js';
+import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-word-guesser',
   templateUrl: './word-guesser.component.html',
@@ -11,10 +12,25 @@ import { Decimal } from 'decimal.js';
 export class WordGuesserComponent implements OnInit {
   constructor(
     private wordService: WordService,
-    private dictionaryService: DictionaryService
+    private dictionaryService: DictionaryService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    const numberOfWords = history.state.numberOfWords;
+    console.log('Number of words ');
+    console.log(numberOfWords);
+
+    const difficulty = history.state.difficulty;
+    console.log('Difficulty ');
+    console.log(difficulty);
+    /* const number = name.numberOfWords;
+    console.log("Broj kreiranih rijeci ispisan ovdje ");
+    console.log(number)
+    const diff = name.difficulty;
+    console.log("Tezina igre: ");
+    console.log(diff) */
     console.log('accuracy: ' + this.accuracy);
     this.loadRandomWords();
   }
@@ -41,7 +57,7 @@ export class WordGuesserComponent implements OnInit {
   }
 
   isTitlesEmpty(): boolean {
-    console.log("usa u funkciju isTitlesEmpty");
+    console.log('usa u funkciju isTitlesEmpty');
     if (this.titles.length == 10) {
       this.createAndFillWordObject();
       return true;
@@ -77,11 +93,11 @@ export class WordGuesserComponent implements OnInit {
     );
     this.counterForAllWords--;
     this.guessedWords++;
-    console.log("guessedWords: " + this.guessedWords)
-    console.log("wrongWords: " + this.wrongWords);
+    console.log('guessedWords: ' + this.guessedWords);
+    console.log('wrongWords: ' + this.wrongWords);
     this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.deleteWord(event);
-    console.log("allWords nakon guessed");
+    console.log('allWords nakon guessed');
     console.log(this.allWordsQueue);
   }
 
@@ -89,7 +105,7 @@ export class WordGuesserComponent implements OnInit {
     this.wrongWords++;
     this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.allWrongWords.push(event);
-    console.log("allWords nakon wrong");
+    console.log('allWords nakon wrong');
     console.log(this.allWordsQueue);
   }
 
