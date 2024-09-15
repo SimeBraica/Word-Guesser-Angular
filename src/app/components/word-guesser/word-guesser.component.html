@@ -13,7 +13,8 @@
     </div>
   </div>
 
-  <div>
+  <div id="word-input-static">
+    Enter a word!
     <div class="input-container">
       <input
         type="text"
@@ -23,8 +24,8 @@
         (keyup.enter)="setWord()"
       />
     </div>
-  </div>
 
-  <div id="counter">{{ guessedWords }} / {{ allWords }}</div>
-  <div>Accuracy: {{ accuracy }} %</div>
+    <div id="counter">{{ guessedWords }} / {{ allWords }}</div>
+    <div>Accuracy: {{ accuracy }} %</div>
+  </div>
 </div>

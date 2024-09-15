@@ -1,14 +1,18 @@
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
-body {
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   background: linear-gradient(
     343deg,
     rgba(81, 99, 149, 1) 0%,
-    rgba(97, 67, 133) 100%
+    rgba(97, 67, 133, 1) 100%
   );
   background-repeat: no-repeat;
-  margin: 0;
-  padding: 0;
+  background-attachment: fixed;
 }
-html {
-  height: 100%;
+
+body {
+  /* min-height: 100vh;   */
 }

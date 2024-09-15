@@ -12,34 +12,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class WordGuesserComponent implements OnInit {
   constructor(
     private wordService: WordService,
-    private dictionaryService: DictionaryService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
+    private dictionaryService: DictionaryService
   ) {}
 
   ngOnInit() {
     const numberOfWords = history.state.numberOfWords;
     console.log('Number of words ');
     console.log(numberOfWords);
-
     const difficulty = history.state.difficulty;
     console.log('Difficulty ');
     console.log(difficulty);
-    /* const number = name.numberOfWords;
-    console.log("Broj kreiranih rijeci ispisan ovdje ");
-    console.log(number)
-    const diff = name.difficulty;
-    console.log("Tezina igre: ");
-    console.log(diff) */
-    console.log('accuracy: ' + this.accuracy);
+
+    this.counterForAllWords = numberOfWords;
+    this.allWords = numberOfWords;
     this.loadRandomWords();
   }
 
   titles: string[] = [];
-  counterForAllWords: number = 10;
+  counterForAllWords: number = 0;
   allWordsQueue: WordToGuess[] = [];
 
-  allWords: number = 10;
+  allWords: number = 0;
   guessedWords: number = 0;
   wrongWords: number = 0;
   accuracy: Decimal.Value = 0;
@@ -51,14 +44,14 @@ export class WordGuesserComponent implements OnInit {
   allGuessedWords: string[] = [];
 
   loadRandomWords() {
-    this.dictionaryService.getRandomWords().subscribe((data: string[]) => {
+    this.dictionaryService.getRandomWords(this.allWords).subscribe((data: string[]) => {
       this.titles = data;
     });
   }
 
   isTitlesEmpty(): boolean {
     console.log('usa u funkciju isTitlesEmpty');
-    if (this.titles.length == 10) {
+    if (this.titles.length == this.allWords) {
       this.createAndFillWordObject();
       return true;
     }
