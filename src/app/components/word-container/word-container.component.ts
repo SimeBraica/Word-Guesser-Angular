@@ -24,11 +24,16 @@ export class WordContainerComponent implements OnInit, OnChanges {
   @Output()
   wrongWordEmmiter = new EventEmitter<string>();
 
+
+  moveIndex: number = 0;
   titlesWordsToGuess: string[] = [];
   ngOnInit() {
     this.wordsToGuess.forEach((word) => {
       this.titlesWordsToGuess.push(this.formatWord(word.title));
     });
+    setInterval(() => {
+      this.moveWords(0);
+    }, 1);
   }
 
   ngOnChanges() {
@@ -50,6 +55,16 @@ export class WordContainerComponent implements OnInit, OnChanges {
     this.guessedWordEmmiter.emit(word);
     return;
   }
+
+  moveWords(index: number): object {
+    let marginLeft = this.wordsToGuess[index].timeOnScreen;
+    console.log('objekt na mistu ', index, 'ima vrijednost ', marginLeft);
+     this.moveIndex += marginLeft/100 * marginLeft;
+    return {
+      'margin-left': `${this.moveIndex}px`,
+    };
+  }
+
   formatWord(word: string): string {
     return word.split(' ').join('').toLowerCase();
   }

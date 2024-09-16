@@ -1,9 +1,9 @@
-import { Component, numberAttribute, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
 import { WordService } from '../../services/word-service/word.service';
 import { DictionaryService } from '../../services/dictionary-service/dictionary.service';
 import { Decimal } from 'decimal.js';
-import { ActivatedRoute, Router } from '@angular/router';
+
 @Component({
   selector: 'app-word-guesser',
   templateUrl: './word-guesser.component.html',
@@ -12,45 +12,43 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class WordGuesserComponent implements OnInit {
   constructor(
     private wordService: WordService,
-    private dictionaryService: DictionaryService
+    private dictionaryService: DictionaryService,
+    private elementRef: ElementRef
   ) {}
 
   ngOnInit() {
-    const numberOfWords = history.state.numberOfWords;
-    console.log('Number of words ');
-    console.log(numberOfWords);
-    const difficulty = history.state.difficulty;
-    console.log('Difficulty ');
-    console.log(difficulty);
-
-    this.counterForAllWords = numberOfWords;
-    this.allWords = numberOfWords;
+    this.allWords = history.state.numberOfWords;
+    this.timeOnScreen = history.state.difficultyObject.timeForDifficulty;
+    this.counterForAllWords = this.allWords;
     this.loadRandomWords();
-  }
+/*     this.moveWordObjects();
+ */  }
 
   titles: string[] = [];
   counterForAllWords: number = 0;
   allWordsQueue: WordToGuess[] = [];
-
   allWords: number = 0;
+
   guessedWords: number = 0;
   wrongWords: number = 0;
-  accuracy: Decimal.Value = 0;
 
+  accuracy: Decimal.Value = 0;
   sendInputWord: string = '';
   inputWord: string = '';
+  timeOnScreen: number = 0;
 
   allWrongWords: string[] = [];
   allGuessedWords: string[] = [];
 
   loadRandomWords() {
-    this.dictionaryService.getRandomWords(this.allWords).subscribe((data: string[]) => {
-      this.titles = data;
-    });
+    this.dictionaryService
+      .getRandomWords(this.allWords)
+      .subscribe((data: string[]) => {
+        this.titles = data;
+      });
   }
 
   isTitlesEmpty(): boolean {
-    console.log('usa u funkciju isTitlesEmpty');
     if (this.titles.length == this.allWords) {
       this.createAndFillWordObject();
       return true;
@@ -62,7 +60,7 @@ export class WordGuesserComponent implements OnInit {
     this.titles.forEach((title) => {
       let newWordToGuess: WordToGuess = {
         title: title,
-        timeOnScreen: 12,
+        timeOnScreen: Math.floor(Math.random() * (this.timeOnScreen - 100) + 100) / 100,
         isCorrect: false,
       };
       if (this.allWordsQueue.length >= this.counterForAllWords) {
@@ -71,6 +69,11 @@ export class WordGuesserComponent implements OnInit {
       this.allWordsQueue.push(newWordToGuess);
     });
   }
+
+  /* moveWordObjects(){
+    console.log("usao u funkciju moveWordObjects");
+    this.elementRef.nativeElement.allWordsQueue[0].display = "none";
+  } */
   setWord() {
     if (this.inputWord == '') {
       return;
@@ -86,20 +89,14 @@ export class WordGuesserComponent implements OnInit {
     );
     this.counterForAllWords--;
     this.guessedWords++;
-    console.log('guessedWords: ' + this.guessedWords);
-    console.log('wrongWords: ' + this.wrongWords);
     this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.deleteWord(event);
-    console.log('allWords nakon guessed');
-    console.log(this.allWordsQueue);
   }
 
   wrongWord(event: string) {
     this.wrongWords++;
     this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.allWrongWords.push(event);
-    console.log('allWords nakon wrong');
-    console.log(this.allWordsQueue);
   }
 
   deleteWord(word: string) {
