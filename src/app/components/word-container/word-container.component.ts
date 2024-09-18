@@ -68,6 +68,7 @@ export class WordContainerComponent implements OnInit, OnChanges {
   moveWords(index: number): void {
     const intervalId = setInterval(() => {
       if (this.moveIndex[index] >= 1300) {
+        this.wordsToGuess[index].isCorrect = false;
         clearInterval(intervalId); 
         return;
       }

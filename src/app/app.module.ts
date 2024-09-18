@@ -12,7 +12,6 @@ import { CreateNewGameComponent } from './components/create-new-game/create-new-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { StartComponent } from './components/start/start.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +19,6 @@ import { StartComponent } from './components/start/start.component';
     GuessedWordsComponent,
     WrongWordsComponent,
     WordGuesserComponent,
-    StartComponent
   ],
   imports: [
     BrowserModule,

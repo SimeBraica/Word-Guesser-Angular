@@ -27,5 +27,7 @@
 
     <div id="counter">{{ guessedWords }} / {{ allWords }}</div>
     <div>Accuracy: {{ accuracy }} %</div>
+    <div><button *ngIf="isGameOver()" (click)="restartGame()">Create new game</button></div>
+
   </div>
 </div>

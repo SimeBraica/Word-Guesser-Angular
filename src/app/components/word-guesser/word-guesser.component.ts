@@ -3,6 +3,8 @@ import { WordToGuess } from '../../models/word-to-guess';
 import { WordService } from '../../services/word-service/word.service';
 import { DictionaryService } from '../../services/dictionary-service/dictionary.service';
 import { Decimal } from 'decimal.js';
+import { count } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-word-guesser',
@@ -13,7 +15,7 @@ export class WordGuesserComponent implements OnInit {
   constructor(
     private wordService: WordService,
     private dictionaryService: DictionaryService,
-    private elementRef: ElementRef
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -70,10 +72,6 @@ export class WordGuesserComponent implements OnInit {
     });
   }
 
-  /* moveWordObjects(){
-    console.log("usao u funkciju moveWordObjects");
-    this.elementRef.nativeElement.allWordsQueue[0].display = "none";
-  } */
   setWord() {
     if (this.inputWord == '') {
       return;
@@ -82,18 +80,33 @@ export class WordGuesserComponent implements OnInit {
     this.inputWord = '';
   }
 
+  isGameOver(){
+    console.log("usao sam u isGameOver")
+    if(this.counterForAllWords == 0){
+      console.log("ako je ovo 0 onda je 0, ", this.counterForAllWords)
+      return true;
+    }
+    console.log("vracam false, ", this.counterForAllWords);
+    return false;
+  }
   guessedWord(event: string) {
     this.allGuessedWords.push(event);
     this.allGuessedWords = this.wordService.removeDuplicates(
       this.allGuessedWords
     );
     this.counterForAllWords--;
+    this.isGameOver()
     this.guessedWords++;
     this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.deleteWord(event);
   }
 
+  restartGame(){
+    this.router.navigate(['/create-new-game']);
+  }
+
   wrongWord(event: string) {
+    this.isGameOver()
     this.wrongWords++;
     this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
     this.allWrongWords.push(event);
