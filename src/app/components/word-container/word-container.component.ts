@@ -5,7 +5,6 @@ import {
   OnChanges,
   OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
 
@@ -24,20 +23,28 @@ export class WordContainerComponent implements OnInit, OnChanges {
   @Output()
   wrongWordEmmiter = new EventEmitter<string>();
 
-
-  moveIndex: number = 0;
+  allTimeOnScreen: number[] = [];
   titlesWordsToGuess: string[] = [];
+  wordStyles: any[] = [];
+  moveIndex: number[] = [];
+
+  constructor() {}
+
   ngOnInit() {
-    this.wordsToGuess.forEach((word) => {
+    this.wordsToGuess.forEach((word, index) => {
       this.titlesWordsToGuess.push(this.formatWord(word.title));
+      this.moveIndex[index] = 0;
+      this.wordStyles[index] = { 'margin-left': '0px' };
     });
-    setInterval(() => {
-      this.moveWords(0);
-    }, 1);
+    this.takeAllTimeOnScreen();
+
+    this.wordsToGuess.forEach((_, index) => {
+      this.moveWords(index); 
+    });
   }
 
   ngOnChanges() {
-    if (this.inputWord == '') {
+    if (this.inputWord === '') {
       return;
     }
     this.checkWordInAllWords(this.inputWord);
@@ -46,23 +53,31 @@ export class WordContainerComponent implements OnInit, OnChanges {
   checkWordInAllWords(word: string) {
     word = this.formatWord(word);
     if (!this.titlesWordsToGuess.includes(word)) {
-      console.log('u djecijoj komponenti sam wrong word ' + word);
       this.wrongWordEmmiter.emit(word);
       return;
     }
-    console.log('dobar sam');
-
     this.guessedWordEmmiter.emit(word);
-    return;
   }
 
-  moveWords(index: number): object {
-    let marginLeft = this.wordsToGuess[index].timeOnScreen;
-    console.log('objekt na mistu ', index, 'ima vrijednost ', marginLeft);
-     this.moveIndex += marginLeft/100 * marginLeft;
-    return {
-      'margin-left': `${this.moveIndex}px`,
-    };
+  takeAllTimeOnScreen() {
+    this.wordsToGuess.forEach((element) => {
+      this.allTimeOnScreen.push(element.timeOnScreen);
+    });
+  }
+
+  moveWords(index: number): void {
+    const intervalId = setInterval(() => {
+      if (this.moveIndex[index] >= 1300) {
+        clearInterval(intervalId); 
+        return;
+      }
+      this.moveIndex[index] += this.allTimeOnScreen[index] / 10;
+
+      this.wordStyles[index] = {
+        'margin-left': `${this.moveIndex[index]}px`,
+      };
+
+    }, 1); 
   }
 
   formatWord(word: string): string {
