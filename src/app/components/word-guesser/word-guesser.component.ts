@@ -1,9 +1,8 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WordToGuess } from '../../models/word-to-guess';
 import { WordService } from '../../services/word-service/word.service';
 import { DictionaryService } from '../../services/dictionary-service/dictionary.service';
 import { Decimal } from 'decimal.js';
-import { count } from 'rxjs';
 import { Router } from '@angular/router';
 
 @Component({
@@ -23,8 +22,7 @@ export class WordGuesserComponent implements OnInit {
     this.timeOnScreen = history.state.difficultyObject.timeForDifficulty;
     this.counterForAllWords = this.allWords;
     this.loadRandomWords();
-/*     this.moveWordObjects();
- */  }
+  }
 
   titles: string[] = [];
   counterForAllWords: number = 0;
@@ -41,6 +39,7 @@ export class WordGuesserComponent implements OnInit {
 
   allWrongWords: string[] = [];
   allGuessedWords: string[] = [];
+  numberOfInputWords: number = 0;
 
   loadRandomWords() {
     this.dictionaryService
@@ -62,7 +61,8 @@ export class WordGuesserComponent implements OnInit {
     this.titles.forEach((title) => {
       let newWordToGuess: WordToGuess = {
         title: title,
-        timeOnScreen: Math.floor(Math.random() * (this.timeOnScreen - 100) + 100) / 100,
+        timeOnScreen:
+          Math.floor(Math.random() * (this.timeOnScreen - 100) + 100) / 100,
         isCorrect: false,
       };
       if (this.allWordsQueue.length >= this.counterForAllWords) {
@@ -76,39 +76,45 @@ export class WordGuesserComponent implements OnInit {
     if (this.inputWord == '') {
       return;
     }
+    this.numberOfInputWords++;
     this.sendInputWord = this.inputWord;
     this.inputWord = '';
   }
 
-  isGameOver(){
-    console.log("usao sam u isGameOver")
-    if(this.counterForAllWords == 0){
-      console.log("ako je ovo 0 onda je 0, ", this.counterForAllWords)
+  isGameOver() {
+    if (this.counterForAllWords == 0) {
       return true;
     }
-    console.log("vracam false, ", this.counterForAllWords);
     return false;
   }
   guessedWord(event: string) {
+    console.log('all words u guessed wordu je: ', this.allWords);
     this.allGuessedWords.push(event);
     this.allGuessedWords = this.wordService.removeDuplicates(
       this.allGuessedWords
     );
     this.counterForAllWords--;
-    this.isGameOver()
+    this.isGameOver();
     this.guessedWords++;
-    this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
+    this.accuracy = this.setAccuracy(this.guessedWords, this.numberOfInputWords);
     this.deleteWord(event);
   }
 
-  restartGame(){
+  restartGame() {
     this.router.navigate(['/create-new-game']);
   }
 
+  wordRanOut(event: string) {
+    console.log('ja sam u funkciji roditelja wordRanOut');
+    this.allWrongWords.push(event);
+    this.deleteWord(event);
+  }
+
   wrongWord(event: string) {
-    this.isGameOver()
+    console.log('all words u wrong wordu je: ', this.allWords);
+    this.isGameOver();
     this.wrongWords++;
-    this.accuracy = this.setAccuracy(10, this.guessedWords, this.wrongWords);
+    this.accuracy = this.setAccuracy(this.guessedWords, this.numberOfInputWords);
     this.allWrongWords.push(event);
   }
 
@@ -120,8 +126,8 @@ export class WordGuesserComponent implements OnInit {
     }
   }
 
-  setAccuracy(allWords: number, guessedWords: number, wrongWords: number) {
-    return ((guessedWords / (allWords + wrongWords)) * 100).toFixed(3);
+  setAccuracy(guessedWords: number, numberOfInputWords: number) {
+    return ((guessedWords / numberOfInputWords) * 100).toFixed(3);
   }
 
   formatWord(word: string): string {

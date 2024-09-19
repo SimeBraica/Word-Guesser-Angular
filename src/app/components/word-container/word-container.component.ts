@@ -22,6 +22,8 @@ export class WordContainerComponent implements OnInit, OnChanges {
   guessedWordEmmiter = new EventEmitter<string>();
   @Output()
   wrongWordEmmiter = new EventEmitter<string>();
+  @Output()
+  wordRanOutEmmiter = new EventEmitter<string>();
 
   allTimeOnScreen: number[] = [];
   titlesWordsToGuess: string[] = [];
@@ -39,7 +41,7 @@ export class WordContainerComponent implements OnInit, OnChanges {
     this.takeAllTimeOnScreen();
 
     this.wordsToGuess.forEach((_, index) => {
-      this.moveWords(index); 
+      this.moveWords(index);
     });
   }
 
@@ -65,11 +67,16 @@ export class WordContainerComponent implements OnInit, OnChanges {
     });
   }
 
+  ranOutOfTime(word: string) {
+    console.log("u word ran outu sam ali dijete ", word);
+    this.wordRanOutEmmiter.emit(word);
+  }
+
   moveWords(index: number): void {
     const intervalId = setInterval(() => {
       if (this.moveIndex[index] >= 1300) {
-        this.wordsToGuess[index].isCorrect = false;
-        clearInterval(intervalId); 
+        this.ranOutOfTime(this.wordsToGuess[index].title);
+        clearInterval(intervalId);
         return;
       }
       this.moveIndex[index] += this.allTimeOnScreen[index] / 10;
@@ -77,8 +84,7 @@ export class WordContainerComponent implements OnInit, OnChanges {
       this.wordStyles[index] = {
         'margin-left': `${this.moveIndex[index]}px`,
       };
-
-    }, 1); 
+    }, 1);
   }
 
   formatWord(word: string): string {
