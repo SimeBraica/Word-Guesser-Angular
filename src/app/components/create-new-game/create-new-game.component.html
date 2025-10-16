@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="create-new-game-screen">
+    <div class="title-div">Create a new game</div>
+    <div class="option">
+      <div class="input-label-div">How many words do you want to generate</div>
+      <mat-form-field appearance="outline">
+        <mat-label>Enter a number</mat-label>
+        <input matInput name="numberOfWords" [(ngModel)]="numberOfWords"/>
+      </mat-form-field>
+    </div>
+    <div class="option">
+      <div class="input-label-div">What difficulty do you want</div>
+      <mat-form-field appearance="outline">
+        <mat-label>Choose one</mat-label>
+        <mat-select [(ngModel)]="difficulty">
+          <mat-option>Clear</mat-option>
+          <mat-option value="easy">Easy</mat-option>
+          <mat-option value="normal">Normal</mat-option>
+          <mat-option value="hard">Hard</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button type="button" class="start-button" (click)="startGame()">
+      Start Game
+    </button>
+  </div>
+</div>

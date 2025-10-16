@@ -18,6 +18,7 @@ export class WordContainerComponent implements OnInit, OnChanges {
   wordsToGuess: WordToGuess[] = [];
   @Input()
   inputWord: string = '';
+
   @Output()
   guessedWordEmmiter = new EventEmitter<string>();
   @Output()
@@ -30,17 +31,13 @@ export class WordContainerComponent implements OnInit, OnChanges {
   wordStyles: any[] = [];
   moveIndex: number[] = [];
 
-  constructor() {}
-
   ngOnInit() {
+    this.takeAllTimeOnScreen();
+
     this.wordsToGuess.forEach((word, index) => {
       this.titlesWordsToGuess.push(this.formatWord(word.title));
       this.moveIndex[index] = 0;
       this.wordStyles[index] = { 'margin-left': '0px' };
-    });
-    this.takeAllTimeOnScreen();
-
-    this.wordsToGuess.forEach((_, index) => {
       this.moveWords(index);
     });
   }
@@ -67,19 +64,14 @@ export class WordContainerComponent implements OnInit, OnChanges {
     });
   }
 
-  ranOutOfTime(word: string) {
-    console.log("u word ran outu sam ali dijete ", word);
-    this.wordRanOutEmmiter.emit(word);
-  }
-
   moveWords(index: number): void {
     const intervalId = setInterval(() => {
       if (this.moveIndex[index] >= 1300) {
-        this.ranOutOfTime(this.wordsToGuess[index].title);
+        this.wordRanOutEmmiter.emit(this.wordsToGuess[index].title);
         clearInterval(intervalId);
         return;
       }
-      this.moveIndex[index] += this.allTimeOnScreen[index] / 10;
+      this.moveIndex[index] += this.allTimeOnScreen[index] / 2;
 
       this.wordStyles[index] = {
         'margin-left': `${this.moveIndex[index]}px`,

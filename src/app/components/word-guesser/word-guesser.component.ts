@@ -105,8 +105,11 @@ export class WordGuesserComponent implements OnInit {
   }
 
   wordRanOut(event: string) {
-    console.log('ja sam u funkciji roditelja wordRanOut');
+    this.isGameOver();
+    /* console.log('ja sam u funkciji roditelja wordRanOut');
+    console.log("kraj mene je rijec koja je istekla nije mi jasno: ", event) */
     this.allWrongWords.push(event);
+    this.counterForAllWords--;
     this.deleteWord(event);
   }
 
